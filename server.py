@@ -44,6 +44,7 @@ def plot_fig(count: int= COUNT):
 
     fig.update_layout(
         dragmode='select',
+        showlegend=True,
         newshape=dict(line_color='cyan'),
         selectdirection='any'
     )

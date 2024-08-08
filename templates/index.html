@@ -10,7 +10,7 @@
   <script src="/static/htmx-plotly-bidirectional.js"></script>
 </head>
 
-<body hx-ext="htmx-plotly-bidirectional">
+<body hx-ext="htmx-plotly-bidirectional" hx-pb-plotevents="plotly_selected, plotly_legendclick">
   <button hx-post="/plot" hx-target="#the-target" hx-pb-plotid="the-plot" hx-trigger="click">Plot</button>
   <button hx-post="/hello" hx-target="#the-target" hx-trigger="click">Say Hello</button>
 
