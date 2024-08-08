@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <script src="https://cdn.plot.ly/plotly-2.34.0.min.js" charset="utf-8"></script>
+  <script src="https://unpkg.com/htmx.org@1.9.10"
+    integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
+    crossorigin="anonymous"></script>
+  <script src="/static/htmx-plotly-bidirectional.js"></script>
+</head>
+
+<body hx-ext="htmx-plotly-bidirectional">
+  <button hx-post="/plot" hx-target="#the-target" hx-pb-plotid="the-plot" hx-trigger="click">Plot</button>
+  <button hx-post="/hello" hx-target="#the-target" hx-trigger="click">Say Hello</button>
+
+  <div id="the-target"></div>
+  <div id="the-plot"></div>
+
+</body>
+
+</html>

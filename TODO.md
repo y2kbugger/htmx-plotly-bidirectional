@@ -1,0 +1,2 @@
+- add other direction, hooking up plotly events to htmx (or plain dom events), using html-attributes in htmx extension
+- investigate using react in addition to newPlot, see https://plotly.com/javascript/plotlyjs-function-reference/#plotlyreact
