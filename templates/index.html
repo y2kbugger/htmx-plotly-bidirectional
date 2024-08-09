@@ -11,11 +11,19 @@
 </head>
 
 <body hx-ext="htmx-plotly-bidirectional" hx-pb-plotevents="plotly_selected, plotly_legendclick">
-  <button hx-post="/plot" hx-target="#the-target" hx-pb-plotid="the-plot" hx-trigger="click">Plot</button>
-  <button hx-post="/hello" hx-target="#the-target" hx-trigger="click">Say Hello</button>
+  <button hx-get="/hello" hx-target="#the-target">Say Hello</button>
+
+  <button hx-get="/plot" hx-target="#the-target" hx-pb-plotid="the-plot" hx-trigger="click, load">Plot</button>
+  <button hx-post="/reset_plot" hx-target="#the-target" hx-pb-plotid="the-plot">Reset Data</button>
 
   <div id="the-target"></div>
-  <div id="the-plot"></div>
+  <div id="the-plot"
+    hx-post="update_plot"
+    hx-trigger="plotly_selected"
+    hx-pb-plotid="the-plot"
+    hx-target="#the-target"
+    hx-vals='js:{"xs": event.detail.points.map(p => p.x)}'></div>
+
 
 </body>
 

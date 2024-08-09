@@ -1,9 +1,11 @@
-from fastapi import FastAPI
+from typing import Annotated
+from fastapi import FastAPI, Form
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 from fastapi.requests import Request
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from plotly import graph_objects as go
+from random import random
 
 from plotly.graph_objs import Figure
 
@@ -18,10 +20,16 @@ def home(request: Request):
     return templates.TemplateResponse(request, "index.html", {})
 
 COUNT= 100
+xs: list[int] = list(range(COUNT))
+ys: list[float] = []
+
+def reset_ys():
+    global ys
+    ys = list(float((x-COUNT//2)**2 + 500) for x in xs)
+
+reset_ys()
 
 def plot_fig(count: int= COUNT):
-    xs = list(range(COUNT))
-    ys = list((x-COUNT//2)**2 for x in xs)
 
     count = min(COUNT,count)
     count = max(0,count)
@@ -52,12 +60,26 @@ def plot_fig(count: int= COUNT):
     return fig
 
 
-@app.post('/plot', response_class=JSONResponse)
+@app.get('/hello', response_class=HTMLResponse)
+def hello():
+    return "<em>Hello, Good Morning!</em>"
+
+
+@app.get('/plot', response_class=JSONResponse)
 def plot():
     fig: Figure = plot_fig()
     return {"plotly_json": fig.to_json(), "htmx_html": '<b>Hello World</b>'}
 
 
-@app.post('/hello', response_class=HTMLResponse)
-def hello():
-    return "<em>Hello, Good Morning!</em>"
+@app.post('/update_plot')
+def update_plot(xs: Annotated[list[int], Form()]):
+    print(xs)
+    for x in xs:
+        ys[x] = ys[x] * (1 + random()/3)
+    return RedirectResponse(url='/plot', status_code=303)
+
+@app.post('/reset_plot')
+def reset_plot():
+    reset_ys()
+    return RedirectResponse(url='/plot', status_code=303)
+

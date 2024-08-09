@@ -1,2 +1,7 @@
-- add other direction, hooking up plotly events to htmx (or plain dom events), using html-attributes in htmx extension
 - investigate using react in addition to newPlot, see https://plotly.com/javascript/plotlyjs-function-reference/#plotlyreact
+  - tried this but was firing empty selection events. need to investigate further
+- Add more examples
+  - plot updating itself upon selectino
+  - plot updating another plot upon selection
+  - plot updating a div upon selection
+  - a filter that updates a plot

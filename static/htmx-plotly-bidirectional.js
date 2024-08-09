@@ -9,7 +9,14 @@ htmx.defineExtension('htmx-plotly-bidirectional', {
         text = payload['htmx_html']
 
         const plotid = plotIdElement.getAttribute('hx-pb-plotid');
-        Plotly.newPlot(plotid, plotlyJson)
+        // if plot already exists (div not empty), update it with react
+        if (document.getElementById(plotid).children.length > 0) {
+            // Plotly.react(plotid, plotlyJson)
+            // return text
+            Plotly.newPlot(plotid, plotlyJson)
+        } else {
+            Plotly.newPlot(plotid, plotlyJson)
+        }
 
 
         var plotEventsElement = htmx.closest(elt, "[hx-pb-plotevents]");
