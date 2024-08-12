@@ -1,5 +1,3 @@
-- investigate using react in addition to newPlot, see https://plotly.com/javascript/plotlyjs-function-reference/#plotlyreact
-  - tried this but was firing empty selection events. need to investigate further
 - Add more examples
   - plot updating itself upon selectino
   - plot updating another plot upon selection
