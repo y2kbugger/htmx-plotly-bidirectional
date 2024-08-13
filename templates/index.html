@@ -3,6 +3,8 @@
 
 <head>
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@2/css/pico.classless.lime.min.css">
+
   <script src="https://cdn.plot.ly/plotly-2.34.0.min.js" charset="utf-8"></script>
   <script src="https://unpkg.com/htmx.org@1.9.10"
     integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
@@ -11,20 +13,94 @@
 </head>
 
 <body hx-ext="htmx-plotly-bidirectional" hx-pb-plotevents="plotly_selected, plotly_legendclick">
-  <button hx-get="/hello" hx-target="#the-target">Say Hello</button>
+  <main>
+    <article>
+      <header>Plotly Button Press Load via HTMX</header>
 
-  <button hx-get="/plot" hx-target="#the-target" hx-pb-plotid="the-plot" hx-trigger="click, load">Plot</button>
-  <button hx-post="/reset_plot" hx-target="#the-target" hx-pb-plotid="the-plot">Reset Data</button>
+      <button hx-pb-plotid="the-plot-button"
+        hx-get="/plot"
+        hx-swap="none">Load Plot</button>
 
-  <div id="the-target"></div>
-  <div id="the-plot"
-    hx-post="update_plot"
-    hx-trigger="plotly_selected"
-    hx-pb-plotid="the-plot"
-    hx-target="#the-target"
-    hx-vals='js:{"xs": event.detail.points.map(p => p.x)}'></div>
+      <div id="the-plot-button"></div>
+    </article>
 
+    <article>
+      <header>Plotly Lazy Load via HTMX</header>
 
+      <span hx-pb-plotid="the-plot-lazy"
+        hx-get="/plot"
+        hx-trigger="load"
+        hx-swap="none"
+        hidden></span>
+
+      <div id="the-plot-lazy"></div>
+    </article>
+
+    <article>
+      <header>Plotly Selection as HTMX Trigger</header>
+
+      <span hx-pb-plotid="the-plot-selectiontrigger"
+        hx-get="/plot"
+        hx-trigger="load"
+        hx-swap="none"
+        hidden></span>
+
+      <div id="the-plot-selectiontrigger"
+        hx-post="calculate_plot_statistics"
+        hx-trigger="plotly_selected"
+        hx-target="#result-selectiontrigger"
+        hx-vals='js:{"ys": event.detail.points.map(p => p.y)}'>
+      </div>
+
+      <label>Average:
+        <span type="text" disabled id="result-selectiontrigger"></span>
+      </label>
+    </article>
+
+    <article>
+      <header>HTMX control updating plot</header>
+
+      <input hx-pb-plotid="the-plot-plotupdate"
+        name="count"
+        type="number" min="1" max="100" step="1" value="50"
+        hx-get="/plot"
+        hx-trigger="load, keyup, change"
+        hx-swap="none" />
+
+      <div id="the-plot-plotupdate"
+        hx-post="update_plot"
+        hx-trigger="plotly_selected"
+        hx-pb-plotid="the-plot"
+        hx-vals='js:{"xs": event.detail.points.map(p => p.x)}'
+        hx-swap="none"></div>
+    </article>
+
+    <article>
+      <header>Plotly Selection updating itself</header>
+
+      <span hx-pb-plotid="the-plot-selfupdate"
+        hx-get="/plot"
+        hx-trigger="load"
+        hx-swap="none"
+        hidden></span>
+
+      <div id="the-plot-selfupdate"
+        hx-post="update_plot"
+        hx-trigger="plotly_selected"
+        hx-pb-plotid="the-plot-selfupdate"
+        hx-vals='js:{"xs": event.detail.points.map(p => p.x)}'
+        hx-swap="none"></div>
+    </article>
+
+    <article>
+      <header>Test typical HTMX swap with extension enabled</header>
+
+      <button hx-get="/hello" hx-target="#the-target-typical">Say Hello</button>
+
+      <div id="the-target-typical"></div>
+    </article>
+
+  </main>
 </body>
 
 </html>

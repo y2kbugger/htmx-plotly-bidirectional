@@ -1,5 +1,2 @@
 - Add more examples
-  - plot updating itself upon selectino
   - plot updating another plot upon selection
-  - plot updating a div upon selection
-  - a filter that updates a plot

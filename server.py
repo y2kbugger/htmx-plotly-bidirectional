@@ -19,17 +19,19 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def home(request: Request):
     return templates.TemplateResponse(request, "index.html", {})
 
-COUNT= 100
+COUNT= 300
 xs: list[int] = list(range(COUNT))
 ys: list[float] = []
 
 def reset_ys():
     global ys
     ys = list(float((x-COUNT//2)**2 + 500) for x in xs)
+    for x in xs:
+        ys[x] = ys[x] * (1 + random()/4)
 
 reset_ys()
 
-def plot_fig(count: int= COUNT):
+def plot_fig(count: int=COUNT):
 
     count = min(COUNT,count)
     count = max(0,count)
@@ -64,22 +66,22 @@ def plot_fig(count: int= COUNT):
 def hello():
     return "<em>Hello, Good Morning!</em>"
 
-
 @app.get('/plot', response_class=JSONResponse)
-def plot():
-    fig: Figure = plot_fig()
+def plot(count: int=COUNT):
+    fig: Figure = plot_fig(count)
     return {"plotly_json": fig.to_json(), "htmx_html": '<b>Hello World</b>'}
-
-
-@app.post('/update_plot')
-def update_plot(xs: Annotated[list[int], Form()]):
-    print(xs)
-    for x in xs:
-        ys[x] = ys[x] * (1 + random()/3)
-    return RedirectResponse(url='/plot', status_code=303)
 
 @app.post('/reset_plot')
 def reset_plot():
     reset_ys()
     return RedirectResponse(url='/plot', status_code=303)
 
+@app.post('/update_plot')
+def update_plot(xs: Annotated[list[int], Form()]):
+    for x in xs:
+        ys[x] = ys[x] * (1 + random() / 2)
+    return RedirectResponse(url='/plot', status_code=303)
+
+@app.post('/calculate_plot_statistics', response_class=HTMLResponse)
+def calculate_plot_statistics(ys: Annotated[list[float], Form()]):
+    return f'{sum(ys)/len(ys)}'
