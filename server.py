@@ -66,10 +66,10 @@ def plot_fig(count: int=COUNT):
 def hello():
     return "<em>Hello, Good Morning!</em>"
 
-@app.get('/plot', response_class=JSONResponse)
+@app.get('/plot', response_class=HTMLResponse)
 def plot(count: int=COUNT):
     fig: Figure = plot_fig(count)
-    return {"plotly_json": fig.to_json(), "htmx_html": '<b>Hello World</b>'}
+    return f"""<script id="plotly-json">{fig.to_json()}</script><b>Hello World</b>"""
 
 @app.post('/reset_plot')
 def reset_plot():

@@ -5,9 +5,8 @@ htmx.defineExtension('htmx-plotly-bidirectional', {
         var plotIdElement = htmx.closest(elt, "[hx-pb-plotid]");
         if (!plotIdElement) { return text }
 
-        const payload = JSON.parse(text)
-        const plotlyJson = JSON.parse(payload['plotly_json'])
-        text = payload['htmx_html']
+        const doc = (new DOMParser()).parseFromString(text, 'text/html')
+        const plotlyJson= JSON.parse(doc.getElementById('plotly-json').textContent);
 
         const plotid = plotIdElement.getAttribute('hx-pb-plotid');
 
